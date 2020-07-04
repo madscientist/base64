@@ -13,7 +13,7 @@ test(unsigned char *encode, unsigned int encodelen,
 	unsigned char *decode_out;
 
 	encode_out = malloc(BASE64_ENCODE_OUT_SIZE(encodelen));
-	decode_out = malloc(BASE64_DECODE_OUT_SIZE(decodelen));
+	decode_out = malloc(encodelen);
 	assert(encode_out);
 	assert(decode_out);
 

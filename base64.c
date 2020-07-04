@@ -124,11 +124,13 @@ base64_decode(const char *in, unsigned int inlen, unsigned char *out)
 	unsigned int i;
 	unsigned int j;
 	unsigned char c;
+	unsigned char l;
 
 	if (inlen & 0x3) {
 		return 0;
 	}
 
+	l = 0;
 	for (i = j = 0; i < inlen; i++) {
 		if (in[i] == BASE64_PAD) {
 			break;
@@ -144,18 +146,18 @@ base64_decode(const char *in, unsigned int inlen, unsigned char *out)
 
 		switch (i & 0x3) {
 		case 0:
-			out[j] = (c << 2) & 0xFF;
+			l = (c << 2) & 0xFF;
 			break;
 		case 1:
-			out[j++] |= (c >> 4) & 0x3;
-			out[j] = (c & 0xF) << 4; 
+			out[j++] = l | ((c >> 4) & 0x3);
+			l = (c & 0xF) << 4;
 			break;
 		case 2:
-			out[j++] |= (c >> 2) & 0xF;
-			out[j] = (c & 0x3) << 6;
+			out[j++] = l | ((c >> 2) & 0xF);
+			l = (c & 0x3) << 6;
 			break;
 		case 3:
-			out[j++] |= c;
+			out[j++] = l | c;
 			break;
 		}
 	}
